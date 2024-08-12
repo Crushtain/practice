@@ -1,0 +1,11 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "description": "\"# practice\"",
+  "main": "jsonService.js",
+  "scripts": {
+    "start": "node jsonService.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

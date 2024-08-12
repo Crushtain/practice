@@ -29,25 +29,36 @@ function stringify(value) {
     if  (typeof value === 'object') {
         let result = [];
         for (let key in value) {
-            //оказалось ненужным, но, вероятно, может понадобитсья, если захочется сделать красивый  вариант JSON с отступами
-            /*if (!Object.hasOwn(value, key)) {
-                return "{}"
-            }*/
-            let val = stringify(value[key]);
-            //проверка условия для key = b
-            if (val !== undefined) {
-                result.push('"' + key + '":' + val);
+            //проверка есть ли undefined или единственное значение 'function' в key
+            if (value[key] !== undefined && typeof value[key] !== 'function') {
+                let val = stringify(value[key]);
+                //проверка условия для key = b
+                if (val !== undefined) {
+                    result.push('"' + key + '":' + val);
+                    }
+                }
             }
-        }
-        return '{' + result.join(',\r\n')  + '}';
+        return '{' + result.join(',')  + '}';
     }
     return undefined;
 }
 
+/*
 console.log(stringify(42)); // 42
 console.log(stringify('string')); // "string"
 console.log(stringify(null)); // null
 console.log(stringify(true)); // true
 console.log(stringify(Infinity)); // null
-console.log(stringify(undefined)); // undefined
+console.log(stringify(undefined)); // undefined */
 console.log(stringify({ a: [1, 'hi', undefined, Symbol(), {}], b: undefined })); // {"a":[1,"hi",null,null,{}]}
+
+const obj = { a: 1, b: undefined, c: "text" };
+const obj1 = { a: undefined, b: function () {}, c: 1 };
+
+console.log(stringify(obj))
+console.log(stringify(obj1))
+
+console.log(JSON.stringify(obj))
+
+console.log(JSON.stringify(obj1))
+console.log(typeof function () {})
