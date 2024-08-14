@@ -10,10 +10,13 @@ function stringify(value) {
         return value.toString();
     }
     if (typeof   value === 'string') {
-        return '"' + value + '"'; //тут можно не приводить value к string чтобы съэкономить время
+        return `"${value}"`;
     }
     if (typeof value === 'function') {
         return null;
+    }
+    if (value instanceof Date) {
+        return `"${value.toISOString()}"`;
     }
     if (typeof value === 'number') {
         if (!isFinite(value)) {
@@ -30,7 +33,8 @@ function stringify(value) {
                 return jsonItem;
             }
         });
-        return '[' + result.join(',') + ']';
+        return `[${result.join(',')}]`;
+
     }
     if  (typeof value === 'object') {
         let result = [];
@@ -40,29 +44,30 @@ function stringify(value) {
                 let val = stringify(value[key]);
                 //проверка условия для key = b
                 if (val !== undefined) {
-                    result.push('"' + key + '":' + val);
+
+                    result.push(`"${key}":${val}`)
                     }
                 }
             }
-        return '{' + result.join(',')  + '}';
+
+        return `{${result.join(',')}}`
     }
     return undefined;
 }
 
-/*
+// date-check
+const obj =  { date: new Date('2023-01-01T00:00:00Z') };
+console.log(stringify(obj))
+console.log(JSON.stringify(obj))
+// other check
 console.log(stringify(42)); // 42
 console.log(stringify('string')); // "string"
 console.log(stringify(null)); // null
 console.log(stringify(true)); // true
 console.log(stringify(Infinity)); // null
-console.log(stringify(undefined)); // undefined */
+console.log(stringify(undefined)); // undefined
 console.log(stringify({ a: [1, 'hi', undefined, Date('2023-01-01T00:00:00Z'), {}], b: undefined })); // {"a":[1,"hi",null,null,{}]}
+console.log(JSON.stringify({ a: [1, 'hi', undefined, Date('2023-01-01T00:00:00Z'), {}], b: undefined }));
 
-const obj = { a: 1, b: undefined, c: "text" };
-const obj1 = { a: undefined, b: function () {}, c: 1 };
-console.log(stringify(obj))
-console.log(stringify(obj1))
-console.log(JSON.stringify(obj))
 
-console.log(stringify(Date('2023-01-01T00:00:00Z')))
-console.log(JSON.stringify(Date('2023-01-01T00:00:00Z')))
+
