@@ -54,8 +54,8 @@ function stringify(value) {
 }
 // date-check
 const obj =  { date: new Date('2023-01-01T00:00:00Z') };
-console.log(stringify(obj))
-console.log(JSON.stringify(obj))
+console.log(stringify(obj));
+console.log(JSON.stringify(obj));
 // other check
 console.log(stringify(42)); // 42
 console.log(stringify('string')); // "string"
