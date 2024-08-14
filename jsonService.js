@@ -43,7 +43,6 @@ function stringify(value) {
                 let val = stringify(value[key]);
                 //проверка условия для key = b
                 if (val !== undefined) {
-
                     result.push(`"${key}":${val}`);
                     }
                 }
