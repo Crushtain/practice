@@ -21,9 +21,15 @@ function stringify(value) {
         }
         return value.toString();
     }
-    if (Array.isArray(value)) {
-        //по условию в массиве undefined возвращает null
-        let result = value.map(item => stringify(item) ?? "null");
+    if (Array.isArray(value)) {    // по условию в массиве undefined возвращает null
+        let result = value.map(function(item) {
+            let jsonItem = stringify(item);
+            if (jsonItem === null || jsonItem === undefined) {
+                return "null";
+            } else {
+                return jsonItem;
+            }
+        });
         return '[' + result.join(',') + ']';
     }
     if  (typeof value === 'object') {
@@ -50,15 +56,13 @@ console.log(stringify(null)); // null
 console.log(stringify(true)); // true
 console.log(stringify(Infinity)); // null
 console.log(stringify(undefined)); // undefined */
-console.log(stringify({ a: [1, 'hi', undefined, Symbol(), {}], b: undefined })); // {"a":[1,"hi",null,null,{}]}
+console.log(stringify({ a: [1, 'hi', undefined, Date('2023-01-01T00:00:00Z'), {}], b: undefined })); // {"a":[1,"hi",null,null,{}]}
 
 const obj = { a: 1, b: undefined, c: "text" };
 const obj1 = { a: undefined, b: function () {}, c: 1 };
-
 console.log(stringify(obj))
 console.log(stringify(obj1))
-
 console.log(JSON.stringify(obj))
 
-console.log(JSON.stringify(obj1))
-console.log(typeof function () {})
+console.log(stringify(Date('2023-01-01T00:00:00Z')))
+console.log(JSON.stringify(Date('2023-01-01T00:00:00Z')))
