@@ -44,11 +44,11 @@ function stringify(value) {
                 //проверка условия для key = b
                 if (val !== undefined) {
 
-                    result.push(`"${key}":${val}`)
+                    result.push(`"${key}":${val}`);
                     }
                 }
             }
-        return `{${result.join(',')}}`
+        return `{${result.join(',')}}`;
     }
     return undefined;
 }
