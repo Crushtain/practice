@@ -34,7 +34,6 @@ function stringify(value) {
             }
         });
         return `[${result.join(',')}]`;
-
     }
     if  (typeof value === 'object') {
         let result = [];
@@ -49,12 +48,10 @@ function stringify(value) {
                     }
                 }
             }
-
         return `{${result.join(',')}}`
     }
     return undefined;
 }
-
 // date-check
 const obj =  { date: new Date('2023-01-01T00:00:00Z') };
 console.log(stringify(obj))
