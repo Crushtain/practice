@@ -9,14 +9,16 @@ function stringify(value) {
     if (typeof value === 'boolean') {
         return value.toString();
     }
-    if (typeof   value === 'string') {
-        return `"${value}"`;
+    if (typeof value === 'string') {
+        value = `"${value}"`
+        return value;
     }
     if (typeof value === 'function') {
         return null;
     }
     if (value instanceof Date) {
-        return `"${value.toISOString()}"`;
+        value = `"${value.toISOString()}"`;
+        return value;
     }
     if (typeof value === 'number') {
         if (!isFinite(value)) {
@@ -33,9 +35,10 @@ function stringify(value) {
                 return jsonItem;
             }
         });
-        return `[${result.join(',')}]`;
+        result = `[${result.join(',')}]`;
+        return result;
     }
-    if  (typeof value === 'object') {
+    if (typeof value === 'object') {
         let result = [];
         for (let key in value) {
             //проверка есть ли undefined или единственное значение 'function' в key
@@ -44,10 +47,11 @@ function stringify(value) {
                 //проверка условия для key = b
                 if (val !== undefined) {
                     result.push(`"${key}":${val}`);
-                    }
                 }
             }
-        return `{${result.join(',')}}`;
+        }
+        result = `{${result.join(',')}}`;
+        return result;
     }
     return undefined;
 }
