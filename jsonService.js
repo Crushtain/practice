@@ -1,5 +1,4 @@
 function stringify(value) {
-    //сначала идут самые простые сравнения
     if (value === null) {
         return "null";
     }
@@ -26,7 +25,8 @@ function stringify(value) {
         }
         return value.toString();
     }
-    if (Array.isArray(value)) {    // по условию в массиве undefined возвращает null
+    if (Array.isArray(value)) {
+        //по условию в массиве undefined возвращает null
         let result = value.map(function(item) {
             let jsonItem = stringify(item);
             if (jsonItem === null || jsonItem === undefined) {
@@ -55,11 +55,11 @@ function stringify(value) {
     }
     return undefined;
 }
-// date-check
+//date-check
 const obj =  { date: new Date('2023-01-01T00:00:00Z') };
 console.log(stringify(obj));
 console.log(JSON.stringify(obj));
-// other check
+//other check
 console.log(stringify(42)); // 42
 console.log(stringify('string')); // "string"
 console.log(stringify(null)); // null
