@@ -1,58 +1,57 @@
+const fs = require("fs")
+const path = require("path")
+const express =  require("express")
+const getAllFiles = require("./controllers/files.js")
+const jokesRoute = require("./routes/jokes")
 
-import fs from "fs"
-import path from "path"
-import {fileURLToPath} from 'url';
-import express from 'express'
-
-// Создаем приложение Express
+const PORT = 5000;
 const app = express();
-const PORT = 3000;
-
-// Определяем папку со статическими файлами
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const staticFolder = path.join(__dirname, 'static');
 
-// Настраиваем маршрут для статических файлов
+//Нашел это решение в интернете, чтобы обойти ошибку CORS
+app.use(function (req,res,next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+})
 app.use(express.static(staticFolder));
+app.use('/', jokesRoute)
+app.get('/', async (req, res) => {
+        try {
+            let result = await getAllFiles(staticFolder)
+            res.send(result)
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Ошибка чтения ')
+        }
+})
+app.get('/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'files', filename);
 
-// Главный маршрут, который будет обрабатывать запросы
-app.get('*', (req, res) => {
-    const fileName = req.params[0]; // Получаем имя файла из URL
-    const filePath = path.join(staticFolder, fileName);
+    console.log(`Запрос к файлу: ${filename}`);
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error(`Ошибка при чтении файла: ${err.message}`);
+                return res.status(500).send('Ошибка при чтении файла'); // Завершаем обработку
+            }
+            const extname = path.extname(filename).toLowerCase();
+            if (extname === '.html' || extname === '.txt') {
+                res.send(data);
+            } else if (extname === '.png') {
+                res.sendFile(filePath);
+            } else if (extname === '.json') {
+                res.setHeader('Content-Type', 'application/json');
+                res.send(data);
+            } else {
+                console.warn(`Неподдерживаемый формат файла - ${extname}`);
+                return res.status(400).send('Неподдерживаемый формат файла'); // Завершаем обработку
+            }
+        });
 
-    // Если имя файла пустое, показываем список файлов
-    if (!fileName || fileName === '/') {
-        fs.readdir(staticFolder, (err, files) => {
-            if (err) {
-                return res.status(500).send('Ошибка при чтении папки');
-            }
-            // Создаем HTML-страницу со списком файлов
-            let fileLinks = files.map(file => `<button onclick="location.href='/${file}'">${file}</button>`).join('<br>');
-            res.send(`<h1>Список файлов:</h1>${fileLinks}`);
-        });
-    } else {
-        // Проверяем наличие запрашиваемого файла
-        fs.access(filePath, fs.constants.F_OK, (err) => {
-            if (err) {
-                return res.status(404).send('404 Файл не найден');
-            }
-            // fs.readFile(filePath, 'utf-8', (err, data) => {
-            //     if (err) {
-            //         return res.status(500).send('Ошибка чтения файла');
-            //     }
-            //     res.send(`<pre>${data}</pre>`);
-            // })
-            res.sendFile(path.join(staticFolder,'index.html'), (err) => {
-                if (err) {
-                    return res.status(500).send('Ошибка при отправке файла');
-                }
-            });
-        });
-    }
 });
-
-// Запускаем сервер
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
