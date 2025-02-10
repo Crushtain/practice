@@ -4,17 +4,14 @@ const express = require('express')
 const getAllFiles = require('./controllers/files.js')
 const jokesRoute = require('./routes/jokes')
 const jokeDB = require('./models/joke')
-const {authenticateDB} = require('./config/db')
 
 const PORT = 5000
 const app = express()
 const staticFolder = path.join(__dirname, 'static')
 
 
-
-
 //Нашел это решение в интернете, чтобы обойти ошибку CORS
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET')
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
@@ -28,7 +25,7 @@ app.get('/db', async (req, res) => {
   try {
     const jokes = await jokeDB.findAll({
       attributes: ['text'],
-      limit: 5,
+      limit: 5
     })
     res.json(jokes)
   } catch (error) {

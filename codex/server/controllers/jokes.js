@@ -18,4 +18,5 @@ async function getJokes() {
     throw new Error('Ошибка получения анекдотов')
   }
 }
+
 module.exports = getJokes

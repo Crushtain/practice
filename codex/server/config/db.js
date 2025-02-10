@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize')
 
 const sequelize = new Sequelize('postgres', 'postgres', '12345', {
   host: 'localhost',
-  dialect: 'postgres',
+  dialect: 'postgres'
 })
 
 async function authenticateDB() {
@@ -16,5 +16,5 @@ async function authenticateDB() {
 
 module.exports = {
   sequelize,
-  authenticateDB,
+  authenticateDB
 }

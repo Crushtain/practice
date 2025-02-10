@@ -7,7 +7,7 @@ async function getAllFiles(staticFolder) {
     const files = await readdir(staticFolder)
     let fileLinks = files
       .map(
-        (file) => `<button onclick="location.href='/${file}'">${file}</button>`,
+        (file) => `<button onclick="location.href='/${file}'">${file}</button>`
       )
       .join('<br>')
     return `<h1>Список файлов:</h1>${fileLinks}`
@@ -15,4 +15,5 @@ async function getAllFiles(staticFolder) {
     throw new Error('Ошибка при чтении папки')
   }
 }
+
 module.exports = getAllFiles

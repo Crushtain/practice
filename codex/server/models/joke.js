@@ -7,17 +7,17 @@ const Joke = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true,
+      primaryKey: true
     },
     text: {
       type: DataTypes.TEXT,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
     tableName: 'jokes',
-    timestamps: false,
-  },
+    timestamps: false
+  }
 )
 
 module.exports = Joke
