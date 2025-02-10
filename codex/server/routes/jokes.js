@@ -5,7 +5,7 @@ router.get('/jokes', async (req, res) => {
   try {
     let result = await getJokes()
     res.send(result)
-  } catch {
+  } catch (error) {
     throw new Error('Ошибка получения анекдотов')
   }
 })
