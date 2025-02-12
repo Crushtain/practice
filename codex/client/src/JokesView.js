@@ -20,10 +20,32 @@ const Jokes = () => {
                 setError('Не удалось загрузить анекдоты.');
             }
         };
+
         fetchJokes();
     }, []);
     console.log("тест 3")
     // Рендер компонента
+    const handleSaveJoke = async (joke) => {
+        try {
+            const response = await fetch('http://localhost:5000/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: joke }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при сохранении анекдота');
+            }
+
+            const result = await response.json();
+            alert(result.message); // Сообщение с сервера, если нужно показать
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className="joke-container">
             <h1 className="joke-container">Анекдоты:</h1>
@@ -32,7 +54,11 @@ const Jokes = () => {
             ) : (
                 <ul>
                     {jokes.map((joke, index) => (
-                        <li key={index}>{joke}</li>
+                        <li key={index}>{joke}
+                            <button onClick={() => handleSaveJoke(joke)}>
+                            Сохранить
+                            </button>
+                        </li>
                     ))}
                 </ul>
             )}

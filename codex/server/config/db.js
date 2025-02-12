@@ -5,16 +5,6 @@ const sequelize = new Sequelize('postgres', 'postgres', '12345', {
   dialect: 'postgres'
 })
 
-async function authenticateDB() {
-  try {
-    await sequelize.authenticate()
-    console.log('База данных подключена')
-  } catch (error) {
-    console.log('Ошибка подключения к базе данных:', error)
-  }
-}
 
-module.exports = {
-  sequelize,
-  authenticateDB
-}
+
+module.exports = sequelize

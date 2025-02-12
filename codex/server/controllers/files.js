@@ -1,8 +1,12 @@
-const fs = require('fs')
-const util = require('util')
-const readdir = util.promisify(fs.readdir)
+const path = require('path');
+const fs = require('fs');
+const util = require('util');
 
-async function getAllFiles(staticFolder) {
+const staticFolder = path.join(__dirname, '..', 'static');
+
+const readdir = util.promisify(fs.readdir);
+
+async function getAllFiles() {
   try {
     const files = await readdir(staticFolder)
     let fileLinks = files
